@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #2e2e2e; /* Light black background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .calculator {
+      background-color: #3a3a3a;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      width: 360px;
+    }
+
+    #display {
+      width: 95%;
+      height: 60px;
+      font-size: 2em;
+      text-align: right;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #1e1e1e;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      font-size: 1.5em;
+      padding: 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #5e5e5e;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: #777;
+    }
+
+    .operator {
+      background-color: #f9a825;
+    }
+
+    .clear {
+      background-color: #f44336;
+    }
+
+    .equal {
+      background-color: #4caf50;
+    }
+
+    .delete {
+      background-color: #ff5722;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" readonly />
+
+    <div class="buttons">
+      <!-- Row 1 -->
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="insertParenthesis()">()</button>
+      <button onclick="append('%')">%</button>
+      <button class="operator" onclick="append('/')">÷</button>
+
+      <!-- Row 2 -->
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button class="operator" onclick="append('*')">×</button>
+
+      <!-- Row 3 -->
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button class="operator" onclick="append('-')">−</button>
+
+      <!-- Row 4 -->
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button class="operator" onclick="append('+')">+</button>
+
+      <!-- Row 5 -->
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button class="delete" onclick="deleteLast()">x</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    let parenthesisToggle = true; // Toggle between ( and )
+
+    function append(value) {
+      display.value += value;
+    }
+
+    function clearDisplay() {
+      display.value = '';
+      parenthesisToggle = true; // reset for new expression
+    }
+
+    function deleteLast() {
+      const lastChar = display.value.slice(-1);
+      if (lastChar === '(') parenthesisToggle = true;
+      if (lastChar === ')') parenthesisToggle = false;
+      display.value = display.value.slice(0, -1);
+    }
+
+    function insertParenthesis() {
+      if (parenthesisToggle) {
+        append('(');
+      } else {
+        append(')');
+      }
+      parenthesisToggle = !parenthesisToggle;
+    }
+
+    function calculate() {
+      try {
+        const expression = display.value
+          .replace(/÷/g, '/')
+          .replace(/×/g, '*')
+          .replace(/−/g, '-');
+        display.value = eval(expression);
+      } catch {
+        display.value = 'Error';
+      }
+    }
+  </script>
+</body>
+</html>
